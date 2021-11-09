@@ -13,6 +13,9 @@ export default {
   components: {
     HelloWorld
   }
+  data(){
+    return age:30
+  }
 }
 </script>
 
