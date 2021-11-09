@@ -1,10 +1,24 @@
-# MiMall
-仿小米商城开发
+# mall
 
-demo:http://mi.futurefe.com/#/index
-1111
+## Project setup
+```
+npm install
+```
 
-12243444
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-sss
-eee
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
