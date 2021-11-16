@@ -23,7 +23,7 @@ export default {
     // storage.setItem('abc',{age:1},'user');
     // storage.clear('a');
     // storage.clear('age','user');
-    this.axios.get('/mock/usr/login.json').then((res) =>{
+    this.axios.get('/proxy').then((res) =>{
       this.res = res;
     });
     
