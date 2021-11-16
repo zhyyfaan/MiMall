@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import storage from './storage/index'
 export default {
   name: 'app',
   components: {
@@ -16,6 +17,12 @@ export default {
     }
   },
   mounted(){
+    //测试storage
+    // storage.setItem('a',1);
+    // storage.setItem('user',{a:1});
+    // storage.setItem('abc',{age:1},'user');
+    // storage.clear('a');
+    // storage.clear('age','user');
     if(this.$cookie.get('userId')){
       this.getUser();
       this.getCartCount();
