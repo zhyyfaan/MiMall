@@ -10,13 +10,13 @@ import store from './store'
 import App from './App.vue'
 // import env from './env' ：使用jsonp或者coars跨域需要使用，本项目使用借口代理跨域
 // mock开关
-const mock = false;
+const mock = true;
 if(mock){
-  require('./mock/api');
+  require('./mock/api');//import是预编译加载，require是执行时才加载，如果mock=false，则不会加载，关联/mock/api.js文件
 }
 // 接口代理的方式实现跨域，配合vue.config.js实现，根据前端的跨域方式做调整 /a/b : /api/a/b => /a/b
-axios.defaults.baseURL = ' https://mock.mengxuegu.com/mock/61935f66f126df7bfd5b7c41/example';
-// axios.defaults.baseURL = '/api';
+// axios.defaults.baseURL = ' https://mock.mengxuegu.com/mock/61935f66f126df7bfd5b7c41/example';
+axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 8000; 
 // 根据环境变量获取不同的请求地址
 // axios.defaults.baseURL = env.baseURL;

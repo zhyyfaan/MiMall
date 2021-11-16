@@ -23,10 +23,16 @@ export default {
     // storage.setItem('abc',{age:1},'user');
     // storage.clear('a');
     // storage.clear('age','user');
-    this.axios.get('/proxy').then((res) =>{
+
+    // this.axios.get('/proxy').then((res) =>{
+    //   this.res = res;
+    // });
+    
+    //本地集成mockjs实现数据mock
+    this.axios.get('/user/login').then((res) =>{
       this.res = res;
     });
-    
+
     if(this.$cookie.get('userId')){
       this.getUser();
       this.getCartCount();
