@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import storage from './storage/index'
+// import storage from './storage/index'
 export default {
   name: 'app',
   components: {
@@ -13,7 +13,7 @@ export default {
   },
   data(){
     return {
-      
+      // res:{}
     }
   },
   mounted(){
@@ -23,6 +23,10 @@ export default {
     // storage.setItem('abc',{age:1},'user');
     // storage.clear('a');
     // storage.clear('age','user');
+    // this.axios.get('/mock/api.js').then((res) =>{
+    //   this.res = res;
+    // });
+    
     if(this.$cookie.get('userId')){
       this.getUser();
       this.getCartCount();
