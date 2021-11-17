@@ -23,7 +23,8 @@ export default {
     // storage.setItem('abc',{age:1},'user');
     // storage.clear('a');
     // storage.clear('age','user');
-    this.axios.get('/proxy').then((res) =>{
+    //通过easymock平台实现数据mock，但是该平台不稳定
+    this.axios.get('/user/login ').then((res) =>{
       this.res = res;
     });
     
