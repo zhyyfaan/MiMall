@@ -1,3 +1,4 @@
+// 该文件功能是汇总所有组件
 <template>
   <div id="app">
     <router-view></router-view>
