@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import './assets/scss/reset.scss';
+@import './assets/scss/reset.scss';  // @import导入scss文件
 @import './assets/scss/config.scss';
 @import './assets/scss/button.scss';
 </style>

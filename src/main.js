@@ -1,5 +1,8 @@
+/*
+该文件是整个项目的入口文件，在运行npm run serve后第一个运行main.js
+ */
 import Vue from 'vue'
-import router from './router'
+import router from './router'//引入路由器：自己写的
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
@@ -7,7 +10,10 @@ import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
+
+//引入App组件，他是所有组件的父组件
 import App from './App.vue'
+
 // import env from './env' ：使用jsonp或者coars跨域需要使用，本项目使用借口代理跨域
 // mock开关
 const mock = false;
@@ -47,10 +53,12 @@ Vue.use(VueLazyLoad,{
   loading:'/imgs/loading-svg/loading-bars.svg'
 })
 Vue.prototype.$message = Message;
+//关闭vue的生产提示
 Vue.config.productionTip = false
 
 new Vue({
   store,
   router,
+  //完成的功能：将App组件放入容器
   render: h => h(App),
 }).$mount('#app')

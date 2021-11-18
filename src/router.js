@@ -1,8 +1,9 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router from 'vue-router'//vue-router是一个插件库，专门用来实现单页面yingyong（SPA）开发
 import Home from './pages/home'
 import Index from './pages/index'
-Vue.use(Router);
+//Vue.use(插件名) 表示使用插件
+Vue.use(Router); 
 
 export default new Router({
   routes:[

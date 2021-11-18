@@ -1,10 +1,10 @@
-//flex布局复用
+//flex布局复用：介绍了flex基本属性使用 https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
 @mixin flex($hov:space-between,$col:center){
   display:flex;
   justify-content:$hov;
   align-items:$col;
 }
-@mixin bgImg($w:0,$h:0,$img:'',$size:contain){
+@mixin bgImg($w:0,$h:0,$img:'',$size:contain){ // img路径默认为空
   display:inline-block;
   width:$w;
   height:$h;
