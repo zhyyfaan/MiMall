@@ -20,11 +20,13 @@
 }
 @mixin positionImg($pos:absolute,$top:0,$right:0,$w:0,$h:0,$img:''){
   position:$pos;
-  top:$top;
+  top:$top; 
   right:$right;
   width:$w;
   height:$h;
   background:url($img) no-repeat center;
+  //contain:等比缩放，按照某一边来覆盖显示区域的，若区域大于图片的比例，会有白边，图片不会变形
+  //对比100%,cover: https://blog.csdn.net/caicai1171523597/article/details/105876002
   background-size:contain;
 }
 @mixin height($h:0,$lh:$h) {

@@ -23,14 +23,14 @@
     font-size:16px;
     li{
       display:inline-block;
-      width:24.9%;
+      width:24.9%; //其实是25%的意思，但是由于浏览器有差异，25不一定是25，所以就宁愿少点
       text-align:center;
       border-right:1px solid #E5E5E5;
       span{
         display:inline-block;
         width:20px;
         height:20px;
-        vertical-align: middle;
+        vertical-align: middle; //vertical-align属性设置元素的垂直对齐方式,可用于设置图片垂直居中，这样图片和文字才能对齐
         margin-right:8px;
       }
       .icon-setting{

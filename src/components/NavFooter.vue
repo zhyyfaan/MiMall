@@ -18,6 +18,7 @@
     name:'nav-footer'
   }
 </script>
+// scoped表示局部：只有当前组件才会被渲染
 <style lang="scss" scoped>
   .footer{
     height:234px;

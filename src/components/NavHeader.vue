@@ -1,7 +1,8 @@
 <template>
   <div class="header">
     <div class="nav-topbar">
-      <div class="container">
+      <!-- 容器，使得页面中间的版面控制在一个正确的位置 -->
+      <div class="container"> 
         <div class="topbar-menu"><!--  页面不刷新 -->
           <a href="javascript:;">小米商城</a> 
           <a href="javascript:;">MUI</a>
@@ -247,7 +248,7 @@
               .children{  //高度展开，可以实现隐藏后出现的功能
                 height:220px;
                 opacity:1;
-              }
+              }   
             }
             .children{
               //这里加绝对定位，要相对于container，因此container要加一个相对定位

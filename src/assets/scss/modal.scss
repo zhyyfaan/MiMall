@@ -2,23 +2,30 @@
   @include position(fixed);
   z-index: 10;
   transition: all .5s;
+  // 灰色遮罩层
   .mask{
     @include position(fixed);
     background-color: $colorI;
     opacity: 0.5;
   }
-  &.slide-enter-active{
+  // 进入后top变为0
+  &.slide-enter-to{
     top:0;
   }
-  &.slide-leave-active{
+  // 出去后不显示
+  &.slide-leave-to{
     top:-100%;
   }
+  // 进入之前不显示，slide-enter定义要放在下面
   &.slide-enter{
     top:-100%;
   }
   .modal-dialog{
+    // 设置弹框水平垂直居中，但top一般不设为50%，原因是40%视觉上更居中比较好看。高度自适应填充（auto）
     @include position(absolute,40%,50%,660px,auto);
     background-color: $colorG;
+    // translate(-50%,-50%) 作用是，往上（x轴）,左（y轴）移动自身长宽的 50%，以使其居于中心位置。
+    //与负margin-left和margin-top实现居中不同的是，margin-left必须知道自身的宽高，而translate可以在不知道宽高的情况下进行居中，tranlate（）函数中的百分比是相对于自身宽高的百分比，所以能进行居中。
     transform:translate(-50%,-50%);
     .modal-header{
       height:60px;
@@ -27,10 +34,11 @@
       line-height: 60px;
       font-size:$fontI;
       .icon-close{
+        // 绝对定位的图标，bgImg不适用
         @include positionImg(absolute,23px,25px,14px,14px,'/imgs/icon-close.png');
         transition: transform .3s;
         &:hover{
-          transform: scale(1.5);
+          transform: scale(1.5); 
         }
       }
     }

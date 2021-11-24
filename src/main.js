@@ -50,6 +50,7 @@ axios.interceptors.response.use(function(response){  //对返回的错误进行�
 Vue.use(VueAxios,axios);
 Vue.use(VueCookie);
 Vue.use(VueLazyLoad,{
+  // 图片加载时的一个动画，是矢量图，不会失真
   loading:'/imgs/loading-svg/loading-bars.svg'
 })
 Vue.prototype.$message = Message;
