@@ -16,14 +16,15 @@ input{
   box-sizing: border-box;
   font-size: 14px;
 }
-.fl{
-  float: left;
+.fl{//左浮动
+  float: left; 
 }
-.fr{
+.fr{//右浮动
   float: right;
 }
+//使用伪类清除浮动
 .clearfix:before,.clearfix:after{
-  content:' ';
+  content:' ';//空字符串占位
   display:table;
 }
 .clearfix:after{

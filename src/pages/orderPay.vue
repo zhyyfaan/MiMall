@@ -17,9 +17,11 @@
             </div>
             <div class="order-total">
               <p>应付总额：<span>{{payment}}</span>元</p>
+              <!-- 订单详情点击可以选择是否展开显示，每点一次就取反一次，当展开的时候，箭头是向上的，否则默认是向下的箭头 -->
               <p>订单详情<em class="icon-down" :class="{'up':showDetail}" @click="showDetail=!showDetail"></em></p>
             </div>
           </div>
+          <!-- 当showDetail=true的时候才显示 -->
           <div class="item-detail" v-if="showDetail">
             <div class="item">
               <div class="detail-title">订单号：</div>
@@ -33,7 +35,9 @@
               <div class="detail-title">商品名称：</div>
               <div class="detail-info">
                 <ul>
+                  <!-- 遍历列出订单中所有商品的名称 -->
                   <li v-for="(item,index) in orderDetail" :key="index">
+                    <!-- 图片懒加载 -->
                     <img v-lazy="item.productImage"/>{{item.productName}}
                   </li>
                 </ul>
@@ -55,6 +59,7 @@
         </div>
       </div>
     </div>
+    <!-- 自定义事件@close -->
     <scan-pay-code v-if="showPay" @close="closePayModal" :img="payImg"></scan-pay-code>
     <modal
       title="支付确认"
@@ -74,17 +79,19 @@
 <script>
 import QRCode from 'qrcode'
 import OrderHeader from './../components/OrderHeader'
+// 微信支付弹框组件
 import ScanPayCode from './../components/ScanPayCode'
+// 是否完成支付弹框
 import Modal from './../components/Modal'
 export default{
   name:'order-pay',
   data(){
     return {
-      orderId:this.$route.query.orderNo,
+      orderId:this.$route.query.orderNo,//从地址栏上获得参数：  订单号
       addressInfo:'',//收货人地址
       orderDetail:[],//订单详情，包含商品列表
       showDetail:false,//是否显示订单详情
-      payType:'',//支付类型
+      payType:'',//支付类型:支付宝还是微信
       showPay:false,//是否显示微信支付弹框
       payImg:'',//微信支付的二维码地址
       showPayModal:false,//是否显示二次支付确认弹框
@@ -101,29 +108,31 @@ export default{
     this.getOrderDetail();
   },
   methods:{
-    getOrderDetail(){
+    getOrderDetail(){//获取订单详情，参考订单接口
       this.axios.get(`/orders/${this.orderId}`).then((res)=>{
-        let item = res.shippingVo;
-        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
-        this.orderDetail = res.orderItemVoList;
+        let item = res.shippingVo;//收货地址
+        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;//字符串模板：收货地址详情
+        this.orderDetail = res.orderItemVoList;//订单详情
         this.payment = res.payment;
       })
-    },
+    }, 
     paySubmit(payType){
       if(payType == 1){
+        //写在alipay.vue文件里面
+        //支付宝的话，打开一个新窗口(_blank)：哈希路由地址：字符串拼接
         window.open('/#/order/alipay?orderId='+this.orderId,'_blank');
-      }else{
-        this.axios.post('/pay',{
+      }else{//微信支付
+        this.axios.post('/pay',{//支付:调用后端接口
           orderId:this.orderId,
           orderName:'Vue高仿小米商城',
           amount:0.01,//单位元
           payType:2 //1支付宝，2微信
         }).then((res)=>{
-          QRCode.toDataURL(res.content)
-          .then(url => {
+          QRCode.toDataURL(res.content)//微信支付：content内容是支付链接，转换为二维码即可扫码支付(QRCode是npm插件可以将链接转换为二维码，上面要import)
+          .then(url => {//url即上一个then得到的支付链接
             this.showPay = true;
             this.payImg = url;
-            this.loopOrderState();
+            this.loopOrderState();// 轮询当前订单支付状态
           })
           .catch(() => {
             this.$message.error('微信二维码生成失败，请稍后重试');
@@ -134,16 +143,16 @@ export default{
     // 关闭微信弹框
     closePayModal(){
       this.showPay = false;
-      this.showPayModal = true;
-      clearInterval(this.T);
+      this.showPayModal = true;//显示弹框：选择是否支付完成
+      clearInterval(this.T);//清空定时器，否则会一直刷下去
     },
-    // 轮询当前订单支付状态
+    // 轮询当前订单支付状态：用户支付完成后不可能自己手动关闭，要轮询增加用户体验
     loopOrderState(){
-      this.T = setInterval(()=>{
-        this.axios.get(`/orders/${this.orderId}`).then((res)=>{
-          if(res.status == 20){
-            clearInterval(this.T);
-            this.goOrderList();
+      this.T = setInterval(()=>{//定时器，每隔1秒做查询，会一直轮询，手动才能停止
+        this.axios.get(`/orders/${this.orderId}`).then((res)=>{//拉取订单状态
+          if(res.status == 20){//20表示已经付款
+            clearInterval(this.T);//清空定时器，否则会一直刷下去
+            this.goOrderList();//跳转到订单列表
           }
         })
       },1000);
@@ -211,9 +220,9 @@ export default{
                 transform: rotate(180deg);
               }
             }
-            .icon-up{
-              transform: rotate(180deg);
-            }
+            // .icon-up{
+            //   transform: rotate(180deg);
+            // }
           }
         }
         .item-detail{

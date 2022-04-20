@@ -6,20 +6,22 @@ import Index from './pages/index'
 Vue.use(Router); 
 
 export default new Router({
+  //mode:'history',  默认是哈希模式，但也可以改成history模式
   routes:[
-    {
+    { //一级路由，path里面要加斜杠，且不能写成./
       path:'/',
       name:'home',
       component:Home,
       redirect:'/index',
       children:[
-        {
+        {  //二级路由，path里面可以不加斜杠
           path: '/index',
           name: 'index',
           component: Index,
         }, {
-          path: '/product/:id',
+          path: '/product/:id', // /:id是占位符，表示带的参数params，不是三级路由，使用占位符接受params参数， 在组件中可以使用&route.params.id来获得数值
           name: 'product',
+          //路由懒加载实现路由的按需加载：https://router.vuejs.org/zh/guide/advanced/lazy-loading.html
           component: () => import('./pages/product.vue')
         }, {
           path: '/detail/:id',

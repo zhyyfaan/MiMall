@@ -148,7 +148,7 @@
           },
           // 分页器
           pagination: {
-            // 指定分类器
+            // 指定分页器
             el: '.swiper-pagination',
             // 分页器点击可以切换
             clickable:true
@@ -228,7 +228,7 @@
         showModal:false
       }
     },
-    mounted(){
+    mounted(){//页面初始化方法
       this.init();
     },
     methods:{
@@ -249,8 +249,8 @@
           productId:id,
           selected: true  //购物车默认是选中状态
         }).then((res)=>{
-          this.showModal = true;
-          this.$store.dispatch('saveCartCount',res.cartTotalQuantity);
+          this.showModal = true;//显示弹框，参考modal.vue文件
+          this.$store.dispatch('saveCartCount',res.cartTotalQuantity);//实时更新购物车数量
         }).catch(()=>{
           this.showModal = true;
         });

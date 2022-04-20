@@ -5,6 +5,7 @@
       <div class="img-scan"></div>
       <div class="img-pay">
         <div class="title">微信支付<em @click="close"></em></div>
+        <!-- 动态绑定二维码图片，从父组件传入 -->
         <div class="qrcode"><img :src="img"></div>
         <div class="tip">
           <p>请使用<span class="theme-color">微信</span>扫一扫</p>
@@ -17,10 +18,10 @@
 <script>
   export default{
     name:'scan-pay-code',
-    props:['img'],
+    props:['img'],//接受的参数：二维码图片
     methods:{
       close(){
-        this.$emit('close');
+        this.$emit('close');//子组件调用父组件自定义close方法:$emit
       }
     }
   }
@@ -33,6 +34,7 @@
     top: 0;
     width: 100%;
     height: 100%;
+    z-index: 10;
     .mask{
       position: fixed;
       top: 0;

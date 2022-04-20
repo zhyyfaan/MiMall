@@ -1,6 +1,8 @@
 <template>
   <div class="cart">
+    <!-- title是传入orderheader子组件的参数 -->
     <order-header title="我的购物车">
+      <!-- 定义插槽，名称为tip -->
       <template v-slot:tip>
         <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
       </template>
@@ -9,6 +11,7 @@
       <div class="container">
         <div class="cart-box">
           <ul class="cart-item-head">
+            <!-- 根据是否全选这个值来确定是否有checked属性，点击按钮触发全选全不选函数 -->
             <li class="col-1"><span class="checkbox" v-bind:class="{'checked':allChecked}" @click="toggleAll"></span>全选</li>
             <li class="col-3">商品名称</li>
             <li class="col-1">单价</li>
@@ -17,11 +20,15 @@
             <li class="col-1">操作</li>
           </ul>
           <ul class="cart-item-list">
+            <!-- 循环遍历data里面的list列表，得到元素和下标 -->
             <li class="cart-item" v-for="(item,index) in list" v-bind:key="index">
               <div class="item-check">
+                <!-- 根据是否商品是否被选定这个数据来确定是否有checked属性 -->
+                <!-- v-bind用于绑定数据和元素属性：https://www.jianshu.com/p/3515e5aa3ade -->
                 <span class="checkbox" v-bind:class="{'checked':item.productSelected}"  @click="updateCart(item)"></span>
               </div>
               <div class="item-name">
+                <!-- 图片懒加载 -->
                 <img v-lazy="item.productMainImage" alt="">
                 <span>{{item.productName + ' , ' + item.productSubtitle}}</span>
               </div>
@@ -83,44 +90,49 @@
           this.renderData(res);
         })
       },
-      // 更新购物车数量和购物车单选状态
-      updateCart(item,type){
+      // 更新某个商品数量和单选状态
+      updateCart(item,type){//type控制操作类型
         let quantity = item.quantity,
             selected = item.productSelected;
+        //减少商品数量
         if(type == '-'){
-          if(quantity == 1){
+          if(quantity == 1){//不能为0
             this.$message.warning('商品至少保留一件');
             return;
           }
           --quantity;
-        }else if(type == '+'){
-          if(quantity > item.productStock){
+        }else if(type == '+'){//增加商品数量
+          if(quantity > item.productStock){//不能大于库存
             this.$message.warning('购买数量不能超过库存数量');
             return;
           }
           ++quantity;
-        }else{
+        }else{//控制是否选中
           selected = !item.productSelected;
         }
-        this.axios.put(`/carts/${item.productId}`,{
+        //接口文档更新购物车某商品数量
+        this.axios.put(`/carts/${item.productId}`,{//字符串模板语法
           quantity,
           selected
         }).then((res)=>{
-          this.renderData(res);
+          this.renderData(res);//返回新的购物车商品列表并重新渲染
         })
       },
       // 删除购物车商品
       delProduct(item){
         this.axios.delete(`/carts/${item.productId}`).then((res)=>{
-          this.$message.success('删除成功');
+          this.$message.success('删除成功');//查看element ui官网来看message的使用方法包括info，success，warning，error
           this.renderData(res);
         });
-      },
-      // 控制全选功能
+      }, 
+      // 控制全选功能，全选或者全不选
       toggleAll(){
+        // 全选时按一下变成全不选，不全选时按一下变成全选
         let url = this.allChecked?'/carts/unSelectAll':'/carts/selectAll';
+        // 查看接口文档使用put方法
         this.axios.put(url).then((res)=>{
-          this.renderData(res);
+          // res是返回的新的购物车列表
+          this.renderData(res);//重新渲染新列表
         })
       },
       // 公共赋值
@@ -128,15 +140,17 @@
         this.list = res.cartProductVoList || [];
         this.allChecked = res.selectedAll;
         this.cartTotalPrice = res.cartTotalPrice;
+        // filter过滤：过滤list中productSelected=true的item，返回符合条件的新数组
         this.checkedNum = this.list.filter(item=>item.productSelected).length;
       },
       // 购物车下单
       order(){
-        let isCheck = this.list.every(item=>!item.productSelected);
-        if(isCheck){
+        // 必须至少选了一件商品才能下单
+        let isCheck = this.list.every(item=>!item.productSelected);//every判断的是每一项都是没有选中状态，返回true，否则返回false
+        if(isCheck){//每一项都是没有选中
           this.$message.warning('请选择一件商品');
-        }else{
-          this.$router.push('/order/confirm');
+        }else{//至少有一项选中了
+          this.$router.push('/order/confirm');//输入下单地址
         }
       }
     }

@@ -12,9 +12,11 @@
         <div class="topbar-user">
           <!-- 下面加v-if：如果user-name是true的话就显示username否则显示登录 -->
           <a href="javascript:;" v-if="username">{{username}}</a>
-           <!-- 点击后完成单页面路由跳转 -->
+          <!-- 点击后完成单页面路由跳转 -->
+          <!-- 登录和退出是互斥出现的，当你登录的时候显示退出，当你未登录的时候显示登录 -->
           <a href="javascript:;" v-if="!username" @click="login">登录</a>
           <a href="javascript:;" v-if="username" @click="logout">退出</a>
+          <!-- 跳转到订单界面 -->
           <a href="/#/order/list" v-if="username">我的订单</a>
           <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车({{cartCount}})</a>
         </div>
@@ -131,7 +133,7 @@
     name:'nav-header',
     data(){
       return {
-        username:'', //登录用户的默认值为空，如果有值的话，则首页看不到登录按钮，直接显示用户名
+        // username:this.$store.state.username, //登录用户名要显示当前用户，为了刷新后仍然显示，需要将用户名用vuex存储起来，这里进行信息读取
         phoneList:[]
       }
     },
@@ -152,8 +154,10 @@
     },
     mounted(){
       this.getProductList(); //调用methods里面的方法
+
+      //获取购物车数量在app.vue里面写了，它仅仅在页面刷新时会重新获取购物车数量，但是单页面项目仅仅是路由跳转，从退出到登录页面不会刷新，因此一旦退出再重新登录的话购物车数量不会重新加载，要在这里再获取一次
       let params = this.$route.params; //取出路由的参数
-      if(params && params.from == 'login'){
+      if(params && params.from == 'login'){//只有从登录页面跳转过来的，才要重新获取购物车数量，否则不需要（App.vue已经能获取，会浪费资源）,这样一来，刷新时只调用app.vue里面的方法，登录时只调用这里的方法
         this.getCartCount();
       }
     },
@@ -178,10 +182,11 @@
       },
       logout(){
         this.axios.post('/user/logout').then(()=>{
-          this.$message.success('退出成功');
-          this.$cookie.set('userId','',{expires:'-1'});
-          this.$store.dispatch('saveUserName','');
-          this.$store.dispatch('saveCartCount','0');
+          this.$message.success('退出成功'); //此时后端已经退出成功
+          //前端退出操作如下
+          this.$cookie.set('userId','',{expires:'-1'});//用户登录后会把cookie的userid设为当前用户（查看login.vue），因此退出时前端cookie的userid清空，设置过期时间为-1，表示这个cookie即刻过期
+          this.$store.dispatch('saveUserName','');//用户登录后会用saveUserName保存用户名称（查看login.vue），因此退出时要把vuex用户名设置为空
+          this.$store.dispatch('saveCartCount','0');//清空购物车数量
         })
       },
       goToCart(){

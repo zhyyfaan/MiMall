@@ -26,6 +26,7 @@
           </div>
           <div class="item-version clearfix">
             <h2>选择版本</h2>
+            <!-- version=1的时候左边的默认选中checked，version=2的时候右边的默认选中，点击哪个就改变version的值（click事件不一定要写成一个函数，可以是表达式改变赋值），即点击哪个check哪个 -->
             <div class="phone fl" :class="{'checked':version==1}" @click="version=1">6GB+64GB 全网通</div>
             <div class="phone fr" :class="{'checked':version==2}" @click="version=2">4GB+64GB 移动4G</div>
           </div>
@@ -38,6 +39,7 @@
           </div>
           <div class="item-total">
             <div class="phone-info clearfix">
+              <!-- 根据version版本为1/2来动态改变显示的字 -->
               <div class="fl">{{product.name}} {{version==1?'6GB+64GB 全网通':'4GB+64GB 移动4G'}} 深灰色</div>
               <div class="fr">{{product.price}}元</div>
             </div>
@@ -70,7 +72,7 @@ export default{
     return {
       id:this.$route.params.id,//获取商品ID
       err:'',
-      version:1,//商品版本切换
+      version:1,//商品版本切换，1/2切换
       product:{},//商品信息
       swiperOption:{
         autoplay:true,
@@ -97,12 +99,13 @@ export default{
       })
     },
     addCart(){
+      //参考购物车接口文档
       this.axios.post('/carts',{
         productId:this.id,
-        selected: true
-      }).then((res={cartProductVoList:0})=>{
-        this.$store.dispatch('saveCartCount',res.cartTotalQuantity);
-        // this.$router.push('/cart');
+        selected: true //默认购物车中该商品被选中，也可以设为false即不被选中
+      }).then((res={cartProductVoList:0})=>{//返回的res是购物车信息，要给res一个默认值，否则未登录状态下res=undefined会报错
+        this.$store.dispatch('saveCartCount',res.cartTotalQuantity);//购物车数量实时更新，res.cartTotalQuantity表示当前购物车数量
+        // this.$router.push('/cart');跳转到购物车界面
       });
     }
   }
